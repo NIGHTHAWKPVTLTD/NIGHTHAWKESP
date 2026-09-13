@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIGHT HAWK ESP| The Ultimate eSports Tournament App</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #0b0c10;
+            --surface-color: #1f2833;
+            --primary-accent: #F25E3A; /* Orange/Red Accent */
+            --secondary-accent: #F25E3A;
+            --text-main: #ffffff;
+            --text-muted: #c5c6c7;
+            /* Accent RGB for shadows */
+            --primary-rgb: 242, 94, 58; 
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- CUSTOM SCROLLBAR & SELECTION --- */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--surface-color); 
+            border-radius: 5px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-accent); }
+        ::selection { background: var(--primary-accent); color: #fff; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.4); }
+            50% { box-shadow: 0 0 30px rgba(var(--primary-rgb), 0.7); }
+            100% { box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.4); }
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: rgba(11, 12, 16, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--primary-accent);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-accent);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-accent);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: #ff7251;
+            box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.6);
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary-accent);
+            color: var(--primary-accent);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-accent);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 120px 5% 50px;
+            background: radial-gradient(circle at 70% 50%, rgba(31, 40, 51, 0.8) 0%, #0b0c10 60%);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(var(--primary-rgb), 0.15);
+            filter: blur(100px);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 50%;
+            z-index: 1;
+            animation: fadeUp 1s ease forwards;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.15;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--primary-accent), #ff967b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 90%;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .hero-image {
+            width: 45%;
+            display: flex;
+            justify-content: center;
+            z-index: 1;
+            animation: fadeUp 1s ease 0.2s forwards, float 6s ease-in-out infinite;
+        }
+
+        .mockup {
+            width: 320px;
+            height: 650px;
+            background-color: var(--bg-color);
+            border: 10px solid var(--surface-color);
+            border-radius: 45px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 30px rgba(var(--primary-rgb), 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 140px;
+            height: 30px;
+            background: var(--surface-color);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            z-index: 2;
+        }
+
+        .mockup img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 35px;
+        }
+
+        /* --- FEATURES SECTION --- */
+        .features {
+            padding: 100px 5%;
+            background-color: var(--bg-color);
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 60px;
+            font-weight: 800;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, var(--surface-color), #161d26);
+            padding: 50px 30px;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: left;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            border-color: rgba(var(--primary-rgb), 0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(var(--primary-rgb), 0.1);
+        }
+
+        .feature-icon {
+            font-size: 45px;
+            background: linear-gradient(135deg, var(--primary-accent), #ff967b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* --- DOWNLOAD / UPLOAD SECTION --- */
+        .cta-section {
+            padding: 100px 5%;
+            background: linear-gradient(rgba(11, 12, 16, 0.95), rgba(11, 12, 16, 0.95)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+            background-attachment: fixed;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        .store-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 50px;
+        }
+        
+        .store-buttons .btn {
+            animation: pulseGlow 3s infinite;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #050608;
+            padding: 50px 5% 30px;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .socials {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .socials a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: var(--surface-color);
+            border-radius: 50%;
+            color: var(--text-main);
+            font-size: 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .socials a:hover {
+            background-color: var(--primary-accent);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 3.2rem; }
+            .hero-content { max-width: 60%; }
+            .hero-image { width: 40%; }
+            .mockup { width: 280px; height: 580px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 150px;
+            }
+            .hero-content, .hero-image {
+                max-width: 100%;
+                width: 100%;
+            }
+            .hero p {
+                margin: 0 auto 40px auto;
+            }
+            .hero-buttons {
+                justify-content: center;
+                margin-bottom: 60px;
+            }
+            .nav-links {
+                display: none; 
+            }
+            .store-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .store-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            .section-title, .cta-section h2 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="#" class="logo">NIGHT<span>HAWK</span></a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#download">Download</a></li>
+        </ul>
+        <a href="#download" class="btn btn-primary">Get the App</a>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Dominate the Arena. <br><span>Organize Anywhere.</span></h1>
+            <p>The all-in-one eSports tournament platform. Host, join, and manage brackets seamlessly from your mobile device. Built for gamers, by gamers.</p>
+            <div class="hero-buttons">
+                <a href="#download" class="btn btn-primary"><i class="fa-brands fa-google-play"></i> Download Now</a>
+                <a href="#features" class="btn btn-outline">Explore Features</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="mockup">
+                <!-- Removed hacky inline styles, handled cleanly in CSS -->
+                <img src="https://www.image2url.com/r2/default/images/1789209929315-a778640e-6887-4657-a6d0-01fefbae1649.jpg" alt="App Screen">
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="features">
+        <h2 class="section-title">Why Choose Our Platform?</h2>
+        <div class="features-grid">
+            
+            <div class="feature-card">
+                <i class="fa-solid fa-sitemap feature-icon"></i>
+                <h3>Live Brackets</h3>
+                <p>Automated, real-time tournament brackets that update instantly as match results are reported.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-users feature-icon"></i>
+                <h3>Team Management</h3>
+                <p>Create squads, invite friends, assign roles, and track your team's performance across multiple games.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fa-solid fa-wallet feature-icon"></i>
+                <h3>Prize Distribution</h3>
+                <p>Securely fund prize pools and automatically distribute winnings to the top players instantly.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- DOWNLOAD / UPLOAD SECTION -->
+    <section id="download" class="cta-section">
+        <h2>Ready to Enter the Tournament?</h2>
+        <p style="font-size: 1.2rem; color: #ddd; max-width: 600px; margin: 0 auto; font-weight: 300;">Download the app today and join thousands of players competing daily. Available on all major platforms.</p>
+        
+        <div class="store-buttons">
+             <a href="https://github.com/hacker36069-sudo/nighthawkesp/releases/download/v1.0.0/NIGHT.HAWK.ESP.apk" class="btn btn-primary" style="font-size: 1.1rem; padding: 15px 35px;" download>
+                <i class="fa-solid fa-download"></i> Download APK
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="socials">
+            <a href="#"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://whatsapp.com/channel/0029VbDiuWX3gvWYMKlZIu02"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <p>&copy; 2026 Night Hawk Esp App. All rights reserved.</p>
+        <p style="font-size: 0.85rem; margin-top: 15px; font-weight: 300;">
+            <a href="#" style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;">Privacy Policy</a> | 
+            <a href="#" style="color: var(--text-muted); text-decoration: none; transition: color 0.3s;">Terms of Service</a>
+        </p>
+    </footer>
+
+</body>
+</html>
